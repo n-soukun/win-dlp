@@ -1,0 +1,81 @@
+<ui:FluentWindow x:Class="otosun.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:otosun"
+        xmlns:views="clr-namespace:otosun.Views"
+        xmlns:services="clr-namespace:otosun.Services"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="WinDLP"
+        Width="1450"
+        Height="802"
+        MinWidth="900"
+        WindowStartupLocation="CenterScreen"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        WindowCornerPreference="Round">
+    
+    <ui:FluentWindow.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </ui:FluentWindow.Resources>
+    
+    <Grid>
+        <ui:NavigationView Name="RootNavigation"
+                           IsBackButtonVisible="Auto"
+                           IsFooterSeparatorVisible="False"
+                           IsPaneToggleVisible="True"
+                           IsTopSeparatorVisible="False"
+                           TitleBar="{Binding ElementName=TitleBar, Mode=OneWay}"
+                           Navigated="RootNavigation_Navigated">
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Name="DownloadNavItem" Content="ダウンロード" Icon="{ui:SymbolIcon ArrowDownload24}" TargetPageType="{x:Type views:DownloadPage}" />
+                <ui:NavigationViewItem Name="HistoryNavItem" Content="履歴" Icon="{ui:SymbolIcon History24}" TargetPageType="{x:Type views:HistoryPage}" />
+            </ui:NavigationView.MenuItems>
+            <ui:NavigationView.FooterMenuItems>
+                <!-- 進捗状況表示 -->
+                <ui:NavigationViewItem IsEnabled="True"
+                                       Icon="{ui:SymbolIcon ArrowDownload24}"
+                                       TargetPageType="{x:Type views:ProgressPage}"
+                                       Visibility="{Binding Source={x:Static services:DownloadService.Instance}, Path=IsDownloading, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+                    <ui:NavigationViewItem.Content>
+                        <Grid DataContext="{Binding Source={x:Static services:DownloadService.Instance}}"
+                              Width="180"
+                              Margin="0,0,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Text="{Binding StatusText}" 
+                                       FontSize="11" 
+                                       TextTrimming="CharacterEllipsis" 
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                       Margin="0,0,0,4"/>
+                                       
+                            <ProgressBar Grid.Row="1"
+                                         Height="4"
+                                         Minimum="0"
+                                         Maximum="100"
+                                         Value="{Binding ProgressValue}"
+                                         IsIndeterminate="{Binding IsProgressIndeterminate}" />
+                        </Grid>
+                    </ui:NavigationViewItem.Content>
+                </ui:NavigationViewItem>
+                
+                <ui:NavigationViewItem Name="SettingsNavItem" Content="設定" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type views:SettingsPage}" />
+            </ui:NavigationView.FooterMenuItems>
+        </ui:NavigationView>
+
+        <ui:TitleBar Name="TitleBar"
+                     Title="WinDLP">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="pack://application:,,,/Assets/otosun_128.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <!-- ContentDialog のホスト（モーダルダイアログ表示用） -->
+        <ui:ContentDialogHost Name="RootContentDialogHost" Panel.ZIndex="10" />
+    </Grid>
+</ui:FluentWindow>

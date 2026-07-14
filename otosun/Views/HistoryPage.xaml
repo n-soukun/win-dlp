@@ -1,0 +1,213 @@
+<Page x:Class="otosun.Views.HistoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:otosun.ViewModels"
+      xmlns:services="clr-namespace:otosun.Services"
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="HistoryPage"
+      KeepAlive="True">
+
+    <Page.DataContext>
+        <vm:HistoryPageViewModel />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Page.Resources>
+
+    <Grid MaxWidth="1000" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- ヘッダー -->
+        <Border Grid.Row="0" Padding="30,24,30,12">
+            <TextBlock Text="ダウンロード履歴"
+                       FontSize="22"
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Border>
+
+        <!-- 履歴リスト -->
+        <StackPanel Grid.Row="1"
+                    Margin="30,0,30,20">
+
+                <!-- 履歴アイテム一覧 -->
+                <ItemsControl ItemsSource="{Binding VisibleItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type services:DownloadHistoryItem}">
+                            <Border Margin="0,0,0,10">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Cursor"
+                                                Value="Arrow" />
+                                    </Style>
+                                </Border.Style>
+                                <Border.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                  CommandParameter="{Binding}" />
+                                </Border.InputBindings>
+                                <ui:Card Padding="14">
+                                    <ui:Card.Style>
+                                        <Style TargetType="ui:Card" BasedOn="{StaticResource {x:Type ui:Card}}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ui:Card.Style>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="128" />
+                                            <ColumnDefinition Width="14" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- サムネイル -->
+                                        <Border Grid.Column="0"
+                                                CornerRadius="6"
+                                                ClipToBounds="True"
+                                                Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                                BorderThickness="1"
+                                                Height="72">
+                                            <Grid>
+                                                <!-- フォールバックアイコン -->
+                                                <ui:SymbolIcon FontSize="28"
+                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center">
+                                                    <ui:SymbolIcon.Style>
+                                                        <Style TargetType="ui:SymbolIcon">
+                                                            <Setter Property="Symbol" Value="Video24" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsMp3}" Value="True">
+                                                                    <Setter Property="Symbol" Value="MusicNote124" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ui:SymbolIcon.Style>
+                                                </ui:SymbolIcon>
+                                                <!-- サムネイル画像 -->
+                                                <Image Name="ThumbnailImage"
+                                                       Stretch="UniformToFill"
+                                                       Tag="{Binding ThumbnailPath}"
+                                                       Loaded="ThumbnailImage_Loaded" />
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- タイトルとリンク -->
+                                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
+
+                                            <!-- ファイル名：削除済みは取り消し線 -->
+                                            <TextBlock Text="{Binding Title}"
+                                                       FontSize="13"
+                                                       FontWeight="SemiBold"
+                                                       TextWrapping="Wrap"
+                                                       MaxHeight="40"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0,0,0,4"
+                                                       ToolTip="{Binding Title}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                                                        <Setter Property="TextDecorations" Value="{x:Null}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsFileMissing}" Value="True">
+                                                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+                                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- ファイルが存在する場合：「ファイルを開く」ハイパーリンク -->
+                                            <TextBlock FontSize="12"
+                                                       Cursor="Hand"
+                                                       Visibility="{Binding IsFileExists, Converter={StaticResource BoolToVis}}">
+                                                <Hyperlink Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                           CommandParameter="{Binding}"
+                                                           Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}"
+                                                           TextDecorations="None">
+                                                    ファイルを開く
+                                                </Hyperlink>
+                                            </TextBlock>
+
+                                            <!-- ファイルが存在しない場合：「削除しました」テキスト -->
+                                            <TextBlock Text="削除しました"
+                                                       FontSize="12"
+                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                       Visibility="{Binding IsFileMissing, Converter={StaticResource BoolToVis}}" />
+                                        </StackPanel>
+
+                                        <!-- 操作ボタン（ファイルが存在する場合のみ表示） -->
+                                        <StackPanel Grid.Column="3"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center"
+                                                    Margin="10,0,0,0"
+                                                    Visibility="{Binding IsFileExists, Converter={StaticResource BoolToVis}}">
+                                            <ui:Button ToolTip="フォルダを開く"
+                                                       Icon="{ui:SymbolIcon Folder24}"
+                                                       Appearance="Secondary"
+                                                       Width="36" Height="36"
+                                                       Margin="0,0,6,0"
+                                                       Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                       CommandParameter="{Binding}" />
+                                            <ui:Button ToolTip="ファイルを削除"
+                                                       Icon="{ui:SymbolIcon Delete24}"
+                                                       Appearance="Secondary"
+                                                       Width="36" Height="36"
+                                                       Command="{Binding DataContext.DeleteFileCommand, RelativeSource={RelativeSource AncestorType=Page}}"
+                                                       CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </ui:Card>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- さらに読み込む -->
+                <ui:Button Content="さらに読み込む"
+                           Icon="{ui:SymbolIcon ArrowDown24}"
+                           Appearance="Secondary"
+                           HorizontalAlignment="Center"
+                           Margin="0,4,0,0"
+                           Command="{Binding LoadMoreCommand}"
+                           Visibility="{Binding HasMoreItems, Converter={StaticResource BoolToVis}}" />
+
+                <!-- 空の履歴表示 -->
+                <StackPanel HorizontalAlignment="Center"
+                            Margin="0,60,0,0">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VisibleItems.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <ui:SymbolIcon Symbol="History24"
+                                   FontSize="48"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,12" />
+                    <TextBlock Text="ダウンロードされた動画がありません"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
