@@ -1,4 +1,14 @@
 <Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM" />
+    <Platform Name="ARM64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="otosun.Package/otosun.Package.wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5" Id="bc872c9b-1ae0-4f18-86a4-6e062dfe15f1">
+    <Deploy />
+  </Project>
   <Project Path="otosun.Test/otosun.Test.csproj" Id="6541d23a-d181-41a5-bc98-abc82ec77775" />
   <Project Path="otosun/otosun.csproj" />
 </Solution>
