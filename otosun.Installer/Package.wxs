@@ -2,7 +2,8 @@
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"> 
 
     <Package Name="WinDLP" Manufacturer="n-soukun" Version="0.0.1.0" UpgradeCode="D66FF2FD-5255-4808-8D9B-D49E62BE73FA" Codepage="932">
-        <Icon Id="AppIcon" SourceFile="otosun.ico" />
+		<MediaTemplate EmbedCab="yes" />
+		<Icon Id="AppIcon" SourceFile="otosun.ico" />
         <Property Id="ARPPRODUCTICON" Value="AppIcon" />
         <WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
         <WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
