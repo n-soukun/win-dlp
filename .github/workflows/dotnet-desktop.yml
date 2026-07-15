@@ -57,9 +57,9 @@ jobs:
 
     env:
       Solution_Name: otosun.slnx
-      Test_Project_Path: otosun\otosun.Test\otosun.Test.csproj
-      Wap_Project_Directory: otosun\otosun.Package
-      Wap_Project_Path: otosun\otosun.Package\otosun.Package.wapproj
+      Test_Project_Path: otosun.Test\otosun.Test.csproj
+      Wap_Project_Directory: otosun.Package
+      Wap_Project_Path: otosun.Package\otosun.Package.wapproj
 
     steps:
     - name: Checkout
