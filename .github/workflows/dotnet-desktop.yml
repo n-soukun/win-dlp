@@ -47,13 +47,13 @@ jobs:
     # 2. 【ポータブル版(軽量)の圧縮】
     - name: Zip Portable App (Lightweight)
       run: |
-        Compress-Archive -Path ./publish_lightweight/* -DestinationPath ./otosun-portable-lightweight.zip
+        Compress-Archive -Path ./publish_lightweight/* -DestinationPath ./windlp-portable.zip
 
     # 3. 【ポータブル版(スタンドアロン)の作成 & 圧縮】
     - name: Publish & Zip Portable App (Standalone)
       run: |
         dotnet publish ${{ env.App_Project_Path }} -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_standalone
-        Compress-Archive -Path ./publish_standalone/* -DestinationPath ./otosun-portable-standalone.zip
+        Compress-Archive -Path ./publish_standalone/* -DestinationPath ./windlp-portable-standalon.zip
 
     # 4. 【MSIインストーラーのビルド】
     - name: Install WiX & Build MSI
@@ -66,8 +66,8 @@ jobs:
       shell: bash
       run: |
         mkdir release_assets
-        cp ./otosun-portable-lightweight.zip ./release_assets/
-        cp ./otosun-portable-standalone.zip ./release_assets/
+        cp ./windlp-portable.zip ./release_assets/
+        cp ./windlp-portable-standalone.zip ./release_assets/
         find ./ -name "*.msi" | xargs -I {} cp {} ./release_assets/
 
     # 6. GitHub Releaseの作成とアップロード
