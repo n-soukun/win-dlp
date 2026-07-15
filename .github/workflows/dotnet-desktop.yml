@@ -53,7 +53,7 @@ jobs:
     - name: Publish & Zip Portable App (Standalone)
       run: |
         dotnet publish ${{ env.App_Project_Path }} -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_standalone
-        Compress-Archive -Path ./publish_standalone/* -DestinationPath ./windlp-portable-standalon.zip
+        Compress-Archive -Path ./publish_standalone/* -DestinationPath ./windlp-portable-standalone.zip
 
     # 4. 【MSIインストーラーのビルド】
     - name: Install WiX & Build MSI
