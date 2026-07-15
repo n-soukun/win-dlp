@@ -12,7 +12,8 @@
     <ProjectReference Include="..\otosun\otosun.csproj" Publish="true" />
   </ItemGroup>
   <PropertyGroup>
-    <AcceptEula>wix7</AcceptEula>
+	  <InstallerPlatform>x64</InstallerPlatform>
+	  <AcceptEula>wix7</AcceptEula>
     <Cultures>ja-JP</Cultures>
   </PropertyGroup>
 </Project>
