@@ -200,7 +200,7 @@
                                Background="Transparent"
                                BorderThickness="0,1,0,0"
                                CornerRadius="0"
-                               NavigateUri="https://wpfui.lepo.co">
+                               NavigateUri="https://n-soukun.github.io/win-dlp">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
