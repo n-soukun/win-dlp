@@ -1,0 +1,18 @@
+﻿<Project Sdk="WixToolset.Sdk/7.0.0">
+  <ItemGroup>
+    <Content Include="otosun.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="License.rtf" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\otosun\otosun.csproj" Publish="true" />
+  </ItemGroup>
+  <PropertyGroup>
+    <AcceptEula>wix7</AcceptEula>
+    <Cultures>ja-JP</Cultures>
+  </PropertyGroup>
+</Project>

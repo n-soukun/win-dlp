@@ -6,8 +6,9 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="otosun.Package/otosun.Package.wapproj" Type="c7167f0d-bc9f-4e6e-afe1-012c56b48db5" Id="bc872c9b-1ae0-4f18-86a4-6e062dfe15f1">
-    <Deploy />
+  <Project Path="otosun.Installer/otosun.Installer.wixproj" Type="b7dd6f7e-def8-4e67-b5b7-07ef123db6f0" Id="a199e086-a275-4773-a783-ad21c18fd5e2">
+    <Platform Solution="*|Any CPU" Project="x64" />
+    <Platform Solution="*|ARM" Project="x64" />
   </Project>
   <Project Path="otosun.Test/otosun.Test.csproj" Id="6541d23a-d181-41a5-bc98-abc82ec77775" />
   <Project Path="otosun/otosun.csproj" />

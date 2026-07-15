@@ -171,7 +171,7 @@
                         <ui:TextBlock Grid.Row="1"
                                       Grid.Column="0"
                                       Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                                      Text="A GUI of yt-dlp for Windows." />
+                                      Text="© 2026 n-soukun" />
                         <TextBlock Grid.Row="0"
                                    Grid.RowSpan="2"
                                    Grid.Column="1"
@@ -219,7 +219,7 @@
                                Background="Transparent"
                                BorderThickness="0,1,0,0"
                                CornerRadius="0"
-                               NavigateUri="https://github.com/lepoco/wpfui">
+                               NavigateUri="https://github.com/n-soukun/win-dlp">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
