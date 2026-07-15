@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinDLP - Windows用動画ダウンロードクライアント</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="WinDLPは、強力なコマンドラインツール yt-dlp のパワーをWindows 11のFluent Designに統合した、美しく直感的な動画ダウンロードアプリです。">
+    <meta name="keywords" content="WinDLP, yt-dlp, GUI, ダウンローダー, 動画ダウンロード, Windows, アプリ, YouTubeダウンロード">
+    <meta name="author" content="n-soukun">
+    <meta property="og:title" content="WinDLP - Windows用動画ダウンロードクライアント">
+    <meta property="og:description" content="強力な yt-dlp のパワーを美しく直感的なGUIで。Windows用動画ダウンロードアプリ WinDLP。">
+    <meta property="og:image" content="assets/screenshot.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/otosun_128.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dark-theme">
+    <!-- Background glow elements for premium aesthetics -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="assets/otosun_128.png" alt="WinDLP Icon" class="logo-img">
+                <span class="logo-text">WinDLP</span>
+            </a>
+            <nav class="main-nav" id="mainNav">
+                <ul>
+                    <li><a href="#features">特徴</a></li>
+                    <li><a href="#how-to-use">使い方</a></li>
+                    <li><a href="#requirements">システム要件</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="https://github.com/n-soukun/win-dlp" target="_blank" rel="noopener" class="btn-github" aria-label="GitHub Repository">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/n-soukun/win-dlp/releases/latest/download/windlp.msi" class="btn btn-primary btn-sm"><span>ダウンロード</span></a>
+            </div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="badge fade-in">v1.0 リリース</div>
+                    <h1 class="fade-in">動画ダウンロードを、<br><span class="text-gradient">もっと美しく、シンプルに。</span></h1>
+                    <p class="fade-in">WinDLPは、強力なコマンドラインツール <code>yt-dlp</code> のパワーを、Windows 11の美しい Fluent Design に融合したデスクトップアプリケーションです。設定不要で、動画や音声を数クリックでダウンロードできます。</p>
+                    <div class="hero-actions-group fade-in">
+                        <a href="https://github.com/n-soukun/win-dlp/releases/latest/download/windlp.msi" class="btn btn-primary btn-lg download-btn">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            <span>WinDLP をダウンロード</span>
+                        </a>
+                        <span class="btn-caption">Windows 10 / 11 対応 (.msi)</span>
+                    </div>
+                </div>
+                <div class="hero-image-container fade-in">
+                    <div class="glass-frame">
+                        <img src="assets/screenshot.png" alt="WinDLP UI Screenshot" class="hero-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <div class="section-title-wrapper">
+                    <span class="section-tag">FEATURES</span>
+                    <h2 class="section-title">主な特徴</h2>
+                    <p class="section-subtitle">WinDLPは、シンプルで直感的な操作感と、強力なダウンロード機能を両立しています。</p>
+                </div>
+
+                <div class="features-grid">
+                    <!-- Card 1 -->
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                            </svg>
+                        </div>
+                        <h3>直感的なダウンロード</h3>
+                        <p>URLを貼り付けるだけで、動画情報を自動解析。お好みの解像度やフォーマット（MP4, MP3など）を瞬時に選択してダウンロードできます。</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                <line x1="8" y1="21" x2="16" y2="21"/>
+                                <line x1="12" y1="17" x2="12" y2="21"/>
+                            </svg>
+                        </div>
+                        <h3>Fluent Design</h3>
+                        <p>Windows 11の「Mica効果」や角丸UIを採用。デスクトップとシームレスに統合し、馴染むように調和する美しいインターフェースを提供します。</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h3>履歴管理システム</h3>
+                        <p>過去にダウンロードした動画の履歴を一覧で表示。同じソースから再取得したり、過去の作業内容をいつでも簡単に振り返ることができます。</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="12" x2="2" y2="12"/>
+                                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+                                <line x1="6" y1="16" x2="6.01" y2="16"/>
+                                <line x1="10" y1="16" x2="10.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <h3>リアルタイム進捗</h3>
+                        <p>ダウンロード速度や残り時間、ファイルサイズなどをリアルタイムで計算・表示。バックグラウンドでの動作状況も進捗バーで一目瞭然です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How To Use Section -->
+        <section id="how-to-use" class="how-to-use-section">
+            <div class="container">
+                <div class="section-title-wrapper">
+                    <span class="section-tag">HOW TO USE</span>
+                    <h2 class="section-title">使い方</h2>
+                    <p class="section-subtitle">わずか3ステップで、お気に入りの動画を保存できます。</p>
+                </div>
+
+                <div class="steps-flow">
+                    <div class="step-item">
+                        <div class="step-number">01</div>
+                        <div class="step-card">
+                            <h4>WinDLPをインストール</h4>
+                            <p>本ページからインストーラー（.msi）をダウンロードし、起動します。画面の指示に従ってインストールを完了してください。</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">02</div>
+                        <div class="step-card">
+                            <h4>動画のURLを入力</h4>
+                            <p>ダウンロードしたいYouTubeやその他の対応サイトの動画URLをコピーし、WinDLPの入力欄に貼り付けます。</p>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">03</div>
+                        <div class="step-card">
+                            <h4>フォーマットを選択して開始</h4>
+                            <p>動画または音声の品質を選択し、「ダウンロード」ボタンをクリックします。進捗バーが100%になれば保存完了です。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Requirements Section -->
+        <section id="requirements" class="requirements-section">
+            <div class="container">
+                <div class="requirements-box">
+                    <div class="requirements-content">
+                        <h3>システム要件</h3>
+                        <ul class="specs-list">
+                            <li>
+                                <strong>OS:</strong>
+                                <span>Windows 10 (1809以降) / Windows 11 (64-bit)</span>
+                            </li>
+                            <li>
+                                <strong>Runtime:</strong>
+                                <span>.NET Desktop Runtime 10.0以降</span>
+                            </li>
+                            <li>
+                                <strong>ネット接続:</strong>
+                                <span>インターネット接続環境 (必須)</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="requirements-note">
+                        <div class="note-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                        </div>
+                        <h4>yt-dlpについて</h4>
+                        <p>WinDLPは、バックエンドとして <code>yt-dlp</code> を使用しています。アプリの初回起動時に最新のバイナリが自動的にダウンロードされるため、ユーザー側で個別の導入や設定作業は一切必要ありません。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-card">
+                    <h2>今すぐ WinDLP を体験しよう</h2>
+                    <p>シンプルで高速なダウンロード環境があなたを待っています。完全無料でご利用いただけます。</p>
+                    <a href="https://github.com/n-soukun/win-dlp/releases/latest/download/windlp.msi" class="btn btn-primary btn-lg download-btn">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                        </svg>
+                        <span>WinDLP をダウンロード (.msi)</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <img src="assets/otosun_128.png" alt="WinDLP Logo" class="footer-logo">
+                <span class="footer-name">WinDLP</span>
+                <p class="footer-desc">A GUI of yt-dlp for Windows.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>プロジェクト</h4>
+                    <ul>
+                        <li><a href="https://github.com/n-soukun/win-dlp" target="_blank" rel="noopener">GitHub リポジトリ</a></li>
+                        <li><a href="https://github.com/n-soukun/win-dlp/releases" target="_blank" rel="noopener">リリースノート</a></li>
+                        <li><a href="https://github.com/n-soukun/win-dlp/blob/main/LICENSE.txt" target="_blank" rel="noopener">ライセンス</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container footer-bottom-container">
+                <p class="copyright">&copy; 2026 n-soukun. Licensed under the MIT License.</p>
+                <p class="disclaimer">本ソフトウェアは私的利用を目的としたオープンソースツールです。ダウンロードする動画の権利および利用規約を遵守してください。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+</html>
