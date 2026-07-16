@@ -34,14 +34,14 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <ui:TextBlock Text="{Binding Download.ActiveStatusText}" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
+            <ui:TextBlock Text="{Binding Download.StatusText}" FontSize="15" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
             <ui:ProgressRing Grid.Column="1"
                              IsIndeterminate="True"
                              Height="20"
                              Width="20"
                              VerticalAlignment="Center"
                              Margin="10,0,0,0"
-                             Visibility="{Binding Download.IsOperationActive, Converter={StaticResource BoolToVis}}" />
+                             Visibility="{Binding Download.IsDownloading, Converter={StaticResource BoolToVis}}" />
         </Grid>
 
         <!-- プログレスバー -->
@@ -49,8 +49,8 @@
                      Height="8"
                      Minimum="0"
                      Maximum="100"
-                     Value="{Binding Download.ActiveProgressValue, Mode=OneWay}"
-                     IsIndeterminate="{Binding Download.ActiveIsProgressIndeterminate, Mode=OneWay}"
+                     Value="{Binding Download.ProgressValue}"
+                     IsIndeterminate="{Binding Download.IsProgressIndeterminate}"
                      Margin="0,5,0,15" />
 
         <!-- スクロール不可のログ (プログレスバーの下、上部フェードアウト) -->
@@ -72,7 +72,7 @@
         </Grid>
 
         <!-- キャンセルボタン (ページ下部) -->
-        <Grid Grid.Row="3" Margin="0,20,0,0" Visibility="{Binding Download.IsDownloading, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
+        <Grid Grid.Row="3" Margin="0,20,0,0">
             <ui:Button Content="ダウンロードをキャンセル"
                        Appearance="Secondary"
                        HorizontalAlignment="Center"

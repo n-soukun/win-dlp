@@ -88,32 +88,14 @@ namespace otosun.ViewModels
 
             DownloadFolderPath = SettingsService.Instance.DownloadFolderPath;
 
-            UpdateYtDlpCommand = new RelayCommand(UpdateYtDlp, () => !IsBusy && !DownloadService.Instance.IsToolsUpdating);
-            UpdateDenoCommand = new RelayCommand(UpdateDeno, () => !IsBusy && !DownloadService.Instance.IsToolsUpdating);
-            UpdateFfmpegCommand = new RelayCommand(UpdateFfmpeg, () => !IsBusy && !DownloadService.Instance.IsToolsUpdating);
+            UpdateYtDlpCommand = new RelayCommand(UpdateYtDlp, () => !IsBusy);
+            UpdateDenoCommand = new RelayCommand(UpdateDeno, () => !IsBusy);
+            UpdateFfmpegCommand = new RelayCommand(UpdateFfmpeg, () => !IsBusy);
             OpenLicenseCommand = new RelayCommand(OpenLicense);
             OpenGitHubCommand = new RelayCommand(OpenGitHub);
             ChangeFolderCommand = new RelayCommand(ChangeFolder);
             OpenFolderCommand = new RelayCommand(OpenFolder);
             ClearHistoryCommand = new RelayCommand(ClearHistory);
-
-            DownloadService.Instance.PropertyChanged += async (s, e) =>
-            {
-                if (e.PropertyName == nameof(DownloadService.IsToolsUpdating))
-                {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        ((RelayCommand)UpdateYtDlpCommand).RaiseCanExecuteChanged();
-                        ((RelayCommand)UpdateDenoCommand).RaiseCanExecuteChanged();
-                        ((RelayCommand)UpdateFfmpegCommand).RaiseCanExecuteChanged();
-                    });
-
-                    if (!DownloadService.Instance.IsToolsUpdating)
-                    {
-                        await RefreshVersionsAsync();
-                    }
-                }
-            };
         }
 
         private void ChangeFolder()
@@ -212,8 +194,6 @@ namespace otosun.ViewModels
                     _settingsCts.Token
                 );
                 await RefreshVersionsAsync();
-                SettingsService.Instance.LastUpdateTime = DateTime.Now;
-                DownloadService.Instance.UpdateToolsStatus();
                 
                 ShowMessageBox("成功", $"{toolName} のインストール・更新が完了しました。");
             }

@@ -64,43 +64,6 @@
                     </ui:NavigationViewItem.Content>
                 </ui:NavigationViewItem>
                 
-                <!-- ツールインストール状況 -->
-                <ui:NavigationViewItem Name="ToolsStatusNavItem" 
-                                       Icon="{ui:SymbolIcon Info24}" 
-                                       TargetPageType="{x:Type views:ProgressPage}"
-                                       Visibility="{Binding Source={x:Static services:DownloadService.Instance}, Path=ShowToolsStatus, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
-                    <ui:NavigationViewItem.Content>
-                        <Grid Width="180" Margin="0,0,10,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            
-                            <TextBlock Text="しばらくお待ちください" 
-                                       FontSize="11" 
-                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
-                                       Margin="0,0,0,4"/>
-                                       
-                            <TextBlock Grid.Row="1"
-                                       Text="{Binding Source={x:Static services:DownloadService.Instance}, Path=ToolsStatusText}" 
-                                       FontSize="11" 
-                                       TextTrimming="CharacterEllipsis" 
-                                       FontWeight="SemiBold"
-                                       Foreground="{DynamicResource AccentTextFillColorPrimaryBrush}" />
-
-                            <ProgressBar Grid.Row="2"
-                                         Height="4"
-                                         Minimum="0"
-                                         Maximum="100"
-                                         Value="{Binding Source={x:Static services:DownloadService.Instance}, Path=ToolsProgressValue}"
-                                         IsIndeterminate="{Binding Source={x:Static services:DownloadService.Instance}, Path=IsToolsProgressIndeterminate}"
-                                         Visibility="{Binding Source={x:Static services:DownloadService.Instance}, Path=IsToolsUpdating, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}"
-                                         Margin="0,6,0,0" />
-                        </Grid>
-                    </ui:NavigationViewItem.Content>
-                </ui:NavigationViewItem>
-                
                 <ui:NavigationViewItem Name="SettingsNavItem" Content="設定" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type views:SettingsPage}" />
             </ui:NavigationView.FooterMenuItems>
         </ui:NavigationView>

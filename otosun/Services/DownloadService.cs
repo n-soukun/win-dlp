@@ -40,10 +40,6 @@ namespace otosun.Services
         private double _progressValue = 0;
         private bool _isProgressIndeterminate = false;
         private string _logText = string.Empty;
-        private string _toolsStatusText = "確認中...";
-        private bool _isToolsUpdating = false;
-        private double _toolsProgressValue = 0;
-        private bool _isToolsProgressIndeterminate = false;
 
         public string UrlText
         {
@@ -83,10 +79,6 @@ namespace otosun.Services
                 if (SetProperty(ref _isDownloading, value))
                 {
                     OnPropertyChanged(nameof(IsNotDownloading));
-                    OnPropertyChanged(nameof(ActiveStatusText));
-                    OnPropertyChanged(nameof(ActiveProgressValue));
-                    OnPropertyChanged(nameof(ActiveIsProgressIndeterminate));
-                    OnPropertyChanged(nameof(IsOperationActive));
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         ((RelayCommand)CancelCommand).RaiseCanExecuteChanged();
@@ -105,7 +97,6 @@ namespace otosun.Services
                 if (SetProperty(ref _isVerifyingUrl, value))
                 {
                     OnPropertyChanged(nameof(IsNotVerifyingUrl));
-                    OnPropertyChanged(nameof(CanSaveVideo));
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
@@ -121,319 +112,25 @@ namespace otosun.Services
         public string StatusText
         {
             get => _statusText;
-            set
-            {
-                if (SetProperty(ref _statusText, value))
-                {
-                    OnPropertyChanged(nameof(ActiveStatusText));
-                }
-            }
+            set => SetProperty(ref _statusText, value);
         }
 
         public double ProgressValue
         {
             get => _progressValue;
-            set
-            {
-                if (SetProperty(ref _progressValue, value))
-                {
-                    OnPropertyChanged(nameof(ActiveProgressValue));
-                }
-            }
+            set => SetProperty(ref _progressValue, value);
         }
 
         public bool IsProgressIndeterminate
         {
             get => _isProgressIndeterminate;
-            set
-            {
-                if (SetProperty(ref _isProgressIndeterminate, value))
-                {
-                    OnPropertyChanged(nameof(ActiveIsProgressIndeterminate));
-                }
-            }
+            set => SetProperty(ref _isProgressIndeterminate, value);
         }
 
         public string LogText
         {
             get => _logText;
             set => SetProperty(ref _logText, value);
-        }
-
-        public string ToolsStatusText
-        {
-            get => _toolsStatusText;
-            set
-            {
-                if (SetProperty(ref _toolsStatusText, value))
-                {
-                    OnPropertyChanged(nameof(ToolsStatusBrush));
-                    OnPropertyChanged(nameof(ActiveStatusText));
-                }
-            }
-        }
-
-        public bool IsToolsUpdating
-        {
-            get => _isToolsUpdating;
-            private set
-            {
-                if (SetProperty(ref _isToolsUpdating, value))
-                {
-                    OnPropertyChanged(nameof(ShowToolsStatus));
-                    OnPropertyChanged(nameof(ActiveStatusText));
-                    OnPropertyChanged(nameof(ActiveProgressValue));
-                    OnPropertyChanged(nameof(ActiveIsProgressIndeterminate));
-                    OnPropertyChanged(nameof(IsOperationActive));
-                }
-            }
-        }
-
-        public double ToolsProgressValue
-        {
-            get => _toolsProgressValue;
-            set
-            {
-                if (SetProperty(ref _toolsProgressValue, value))
-                {
-                    OnPropertyChanged(nameof(ActiveProgressValue));
-                }
-            }
-        }
-
-        public bool IsToolsProgressIndeterminate
-        {
-            get => _isToolsProgressIndeterminate;
-            set
-            {
-                if (SetProperty(ref _isToolsProgressIndeterminate, value))
-                {
-                    OnPropertyChanged(nameof(ActiveIsProgressIndeterminate));
-                }
-            }
-        }
-
-        public string ActiveStatusText => IsDownloading ? StatusText : (IsToolsUpdating ? ToolsStatusText : StatusText);
-        public double ActiveProgressValue => IsDownloading ? ProgressValue : (IsToolsUpdating ? ToolsProgressValue : ProgressValue);
-        public bool ActiveIsProgressIndeterminate => IsDownloading ? IsProgressIndeterminate : (IsToolsUpdating ? IsToolsProgressIndeterminate : IsProgressIndeterminate);
-        public bool IsOperationActive => IsDownloading || IsToolsUpdating;
-
-        private System.Windows.Media.Brush GetBrushResource(string key, System.Windows.Media.Brush fallback)
-        {
-            try
-            {
-                if (Application.Current != null && Application.Current.TryFindResource(key) is System.Windows.Media.Brush brush)
-                {
-                    return brush;
-                }
-            }
-            catch { }
-            return fallback;
-        }
-
-        public System.Windows.Media.Brush ToolsStatusBrush
-        {
-            get
-            {
-                if (ToolsStatusText.Contains("エラー") || ToolsStatusText.Contains("未導入"))
-                {
-                    return System.Windows.Media.Brushes.Red;
-                }
-                else if (ToolsStatusText.Contains("ダウンロード中") || ToolsStatusText.Contains("展開中") || ToolsStatusText.Contains("アップデート中") || ToolsStatusText.Contains("更新チェック") || ToolsStatusText.Contains("確認中"))
-                {
-                    return GetBrushResource("SystemAccentColorBrush", System.Windows.Media.Brushes.DodgerBlue);
-                }
-                else if (ToolsStatusText == "すべて導入済み" || ToolsStatusText == "最新状態")
-                {
-                    var greenBrush = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(40, 167, 69)); // Bootstrap success green
-                    return GetBrushResource("SystemGreenColorBrush", greenBrush);
-                }
-                return GetBrushResource("TextFillColorPrimaryBrush", System.Windows.Media.Brushes.White);
-            }
-        }
-
-        public bool IsYtDlpInstalled => File.Exists(Path.Combine(ToolService.GetToolsDir(), "yt-dlp.exe"));
-        public bool IsDenoInstalled => File.Exists(Path.Combine(ToolService.GetToolsDir(), "deno.exe"));
-        public bool IsFfmpegInstalled => File.Exists(Path.Combine(ToolService.GetToolsDir(), "ffmpeg.exe"));
-
-        public bool CanSaveVideo => IsNotVerifyingUrl && IsYtDlpInstalled;
-
-        public bool ShowToolsStatus => !IsYtDlpInstalled || !IsDenoInstalled || !IsFfmpegInstalled || IsToolsUpdating;
-
-        public void UpdateToolsStatus(bool preserveStatusTextOnError = false, bool hasError = false)
-        {
-            bool ytDlp = IsYtDlpInstalled;
-            bool deno = IsDenoInstalled;
-            bool ffmpeg = IsFfmpegInstalled;
-
-            OnPropertyChanged(nameof(IsYtDlpInstalled));
-            OnPropertyChanged(nameof(IsDenoInstalled));
-            OnPropertyChanged(nameof(IsFfmpegInstalled));
-            OnPropertyChanged(nameof(CanSaveVideo));
-            OnPropertyChanged(nameof(ShowToolsStatus));
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ((RelayCommand)SaveCommand).RaiseCanExecuteChanged();
-                ((RelayCommand)SaveAsCommand).RaiseCanExecuteChanged();
-            });
-
-            if (IsToolsUpdating)
-            {
-                return;
-            }
-
-            if (preserveStatusTextOnError && hasError)
-            {
-                return;
-            }
-
-            if (ytDlp && deno && ffmpeg)
-            {
-                ToolsStatusText = "すべて導入済み";
-            }
-            else if (!ytDlp && !deno && !ffmpeg)
-            {
-                ToolsStatusText = "未導入 (ダウンロード待ち)";
-            }
-            else
-            {
-                var missing = new System.Collections.Generic.List<string>();
-                if (!ytDlp) missing.Add("yt-dlp");
-                if (!deno) missing.Add("Deno");
-                if (!ffmpeg) missing.Add("FFmpeg");
-                ToolsStatusText = $"{string.Join(", ", missing)} 未導入";
-            }
-        }
-
-        public async Task InitializeToolsAsync()
-        {
-            var toolsDir = ToolService.GetToolsDir();
-            if (!Directory.Exists(toolsDir))
-            {
-                Directory.CreateDirectory(toolsDir);
-            }
-            
-            UpdateToolsStatus();
-
-            bool isYtDlpMissing = !IsYtDlpInstalled;
-            bool isDenoMissing = !IsDenoInstalled;
-            bool isFfmpegMissing = !IsFfmpegInstalled;
-
-            bool needDownload = isYtDlpMissing || isDenoMissing || isFfmpegMissing;
-            bool needUpdate = false;
-
-            if (!needDownload)
-            {
-                var lastUpdate = SettingsService.Instance.LastUpdateTime;
-                if (DateTime.Now - lastUpdate >= TimeSpan.FromHours(24))
-                {
-                    needUpdate = true;
-                }
-            }
-
-            if (needDownload || needUpdate)
-            {
-                IsToolsUpdating = true;
-                _ = Task.Run(async () =>
-                {
-                    bool hasError = false;
-                    try
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            LogText = string.Empty;
-                        });
-                        AppendLog("=== 専用ツールの初期化・ダウンロード処理を開始しました ===");
-
-                        if (needDownload)
-                        {
-                            ToolsStatusText = "一部のツールが未導入です。バックグラウンドで導入中...";
-                            
-                            if (isYtDlpMissing)
-                            {
-                                ToolsStatusText = "yt-dlp をダウンロード中...";
-                                await ToolService.SetupYtDlpAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                    if (status != null) ToolsStatusText = status;
-                                    if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                    if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                                }, CancellationToken.None);
-                                UpdateToolsStatus();
-                            }
-
-                            if (isDenoMissing)
-                            {
-                                ToolsStatusText = "Deno をダウンロード中...";
-                                await ToolService.SetupDenoAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                    if (status != null) ToolsStatusText = status;
-                                    if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                    if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                                }, CancellationToken.None);
-                                UpdateToolsStatus();
-                            }
-
-                            if (isFfmpegMissing)
-                            {
-                                ToolsStatusText = "FFmpeg をダウンロード中...";
-                                await ToolService.SetupFfmpegAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                    if (status != null) ToolsStatusText = status;
-                                    if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                    if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                                }, CancellationToken.None);
-                                UpdateToolsStatus();
-                            }
-
-                            SettingsService.Instance.LastUpdateTime = DateTime.Now;
-                        }
-                        else if (needUpdate)
-                        {
-                            ToolsStatusText = "起動時のアップデートを確認中...";
-                            AppendLog("最後にアップデートしてから24時間以上経過したため、アップデートを確認します。");
-                            
-                            ToolsStatusText = "yt-dlp をアップデート中...";
-                            await ToolService.SetupYtDlpAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                if (status != null) ToolsStatusText = status;
-                                if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                            }, CancellationToken.None);
-
-                            ToolsStatusText = "Deno をアップデート中...";
-                            await ToolService.SetupDenoAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                if (status != null) ToolsStatusText = status;
-                                if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                            }, CancellationToken.None);
-
-                            await ToolService.SetupFfmpegAsync(toolsDir, msg => AppendLog(msg), (status, prog, indet) => {
-                                if (status != null) ToolsStatusText = status;
-                                if (prog.HasValue) ToolsProgressValue = prog.Value;
-                                if (indet.HasValue) IsToolsProgressIndeterminate = indet.Value;
-                            }, CancellationToken.None);
-
-                            SettingsService.Instance.LastUpdateTime = DateTime.Now;
-                        }
-
-                        ToolsStatusText = "すべて導入済み";
-                        AppendLog("=== 専用ツールの初期化・ダウンロード処理が完了しました ===");
-                    }
-                    catch (Exception ex)
-                    {
-                        ToolsStatusText = $"ツールの導入エラー: {ex.Message}";
-                        AppendLog($"[エラー] ツールの導入処理中にエラーが発生しました: {ex.Message}");
-                        hasError = true;
-                    }
-                    finally
-                    {
-                        IsToolsUpdating = false;
-                        ToolsProgressValue = 0;
-                        IsToolsProgressIndeterminate = false;
-                        UpdateToolsStatus(preserveStatusTextOnError: true, hasError: hasError);
-                    }
-                });
-            }
-            else
-            {
-                UpdateToolsStatus();
-            }
         }
 
         public ICommand PasteCommand { get; }
@@ -449,8 +146,8 @@ namespace otosun.Services
         private DownloadService()
         {
             PasteCommand = new RelayCommand(Paste, () => !IsVerifyingUrl);
-            SaveCommand = new RelayCommand(Save, () => !IsVerifyingUrl && IsYtDlpInstalled);
-            SaveAsCommand = new RelayCommand(SaveAs, () => !IsVerifyingUrl && IsYtDlpInstalled);
+            SaveCommand = new RelayCommand(Save, () => !IsVerifyingUrl);
+            SaveAsCommand = new RelayCommand(SaveAs, () => !IsVerifyingUrl);
             CancelCommand = new RelayCommand(Cancel, () => IsDownloading);
             QueueItems = new ObservableCollection<DownloadItem>();
         }
@@ -508,12 +205,13 @@ namespace otosun.Services
             {
                 var toolsDir = ToolService.GetToolsDir();
                 
-                // 1. yt-dlp の導入状態を確認
-                if (!IsYtDlpInstalled)
-                {
-                    ShowMessageBox("エラー", "yt-dlp が見つかりません。ツールの導入が完了するまでお待ちください。");
-                    return;
-                }
+                // 1. ツールのセットアップ状態を確認
+                await ToolService.SetupToolsAsync(
+                    toolsDir,
+                    msg => { },
+                    (status, prog, indet) => { },
+                    CancellationToken.None
+                );
 
                 // 2. yt-dlp を使用して動画のタイトル（メタ情報）を取得し、URLの動画が存在するか検証する
                 var videoTitle = await ToolService.GetVideoTitleAsync(toolsDir, url, msg => { }, CancellationToken.None);
@@ -606,12 +304,6 @@ namespace otosun.Services
                 {
                     while (true)
                     {
-                        // Deno, FFmpeg の導入が終わるまで待機
-                        while (!IsDenoInstalled || !IsFfmpegInstalled)
-                        {
-                            await Task.Delay(1000);
-                        }
-
                         DownloadItem? nextItem = null;
                         lock (_queueLock)
                         {
@@ -665,11 +357,33 @@ namespace otosun.Services
             {
                 var toolsDir = ToolService.GetToolsDir();
                 
-                // ツールの導入状態を最終確認
-                if (!IsYtDlpInstalled || !IsDenoInstalled || !IsFfmpegInstalled)
-                {
-                    throw new Exception("必要なツール (yt-dlp, Deno, FFmpeg) が見つかりません。ツールの導入が完了するまでお待ちください。");
-                }
+                // ツールの最終確認（念のため）
+                await ToolService.SetupToolsAsync(
+                    toolsDir,
+                    msg => AppendLog(msg),
+                    (status, prog, indet) =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            if (status != null)
+                            {
+                                item.StatusText = status;
+                                StatusText = $"{item.Title}: {status}";
+                            }
+                            if (prog.HasValue)
+                            {
+                                item.ProgressValue = prog.Value;
+                                ProgressValue = prog.Value;
+                            }
+                            if (indet.HasValue)
+                            {
+                                item.IsProgressIndeterminate = indet.Value;
+                                IsProgressIndeterminate = indet.Value;
+                            }
+                        });
+                    },
+                    cts.Token
+                );
 
                 var tempFileBase = Path.Combine(toolsDir, $"temp_{Guid.NewGuid()}");
                 

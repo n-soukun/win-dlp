@@ -7,7 +7,6 @@ namespace otosun.Services
     public class AppSettings
     {
         public string DownloadFolderPath { get; set; } = string.Empty;
-        public DateTime LastUpdateTime { get; set; } = DateTime.MinValue;
     }
 
     public class SettingsService
@@ -47,25 +46,6 @@ namespace otosun.Services
                 lock (_lock)
                 {
                     _settings.DownloadFolderPath = value;
-                }
-                Save();
-            }
-        }
-
-        public DateTime LastUpdateTime
-        {
-            get
-            {
-                lock (_lock)
-                {
-                    return _settings.LastUpdateTime;
-                }
-            }
-            set
-            {
-                lock (_lock)
-                {
-                    _settings.LastUpdateTime = value;
                 }
                 Save();
             }
