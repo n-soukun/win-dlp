@@ -314,9 +314,21 @@ namespace otosun.Services
         {
             var ytDlpPath = Path.Combine(toolsDir, "yt-dlp.exe");
             var denoPath = Path.Combine(toolsDir, "deno.exe");
+            var ffmpegPath = Path.Combine(toolsDir, "ffmpeg.exe");
 
             log($"[yt-dlp] メタ情報の取得を開始: {url}");
-            var arguments = $"--js-runtimes \"deno:{denoPath}\" --ffmpeg-location \"{toolsDir}\" --no-playlist --get-title \"{url}\"";
+            
+            var argsBuilder = new StringBuilder();
+            if (File.Exists(denoPath))
+            {
+                argsBuilder.Append($"--js-runtimes \"deno:{denoPath}\" ");
+            }
+            if (File.Exists(ffmpegPath))
+            {
+                argsBuilder.Append($"--ffmpeg-location \"{toolsDir}\" ");
+            }
+            argsBuilder.Append($"--no-playlist --get-title \"{url}\"");
+            var arguments = argsBuilder.ToString();
 
             var startInfo = new ProcessStartInfo
             {
@@ -417,11 +429,23 @@ namespace otosun.Services
         {
             var ytDlpPath = Path.Combine(toolsDir, "yt-dlp.exe");
             var denoPath = Path.Combine(toolsDir, "deno.exe");
+            var ffmpegPath = Path.Combine(toolsDir, "ffmpeg.exe");
 
             log($"[yt-dlp] ダウンロード処理を開始します (音声のみ: {isAudioOnly})");
             var outputTemplate = tempFileBasePattern + ".%(ext)s";
             var formatSelector = isAudioOnly ? "bestaudio/best" : "bestvideo+bestaudio/best";
-            var arguments = $"--js-runtimes \"deno:{denoPath}\" --ffmpeg-location \"{toolsDir}\" --no-playlist -f \"{formatSelector}\" -o \"{outputTemplate}\" \"{url}\"";
+
+            var argsBuilder = new StringBuilder();
+            if (File.Exists(denoPath))
+            {
+                argsBuilder.Append($"--js-runtimes \"deno:{denoPath}\" ");
+            }
+            if (File.Exists(ffmpegPath))
+            {
+                argsBuilder.Append($"--ffmpeg-location \"{toolsDir}\" ");
+            }
+            argsBuilder.Append($"--no-playlist -f \"{formatSelector}\" -o \"{outputTemplate}\" \"{url}\"");
+            var arguments = argsBuilder.ToString();
 
             var startInfo = new ProcessStartInfo
             {
