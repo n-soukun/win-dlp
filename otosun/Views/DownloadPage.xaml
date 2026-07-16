@@ -146,7 +146,7 @@
 
                                         <ui:SplitButton Name="SaveButton"
                                                         Grid.Column="1"
-                                                        IsEnabled="{Binding Download.IsNotVerifyingUrl}"
+                                                        IsEnabled="{Binding Download.CanSaveVideo}"
                                                         HorizontalAlignment="Right"
                                                         Appearance="Primary"
                                                         Height="40"
