@@ -64,13 +64,16 @@ namespace otosun
             };
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // DownloadService にダイアログホストを登録
             DownloadService.Instance.SetContentDialogHost(RootContentDialogHost);
 
             // 初回起動時にダウンロード画面へ遷移
             RootNavigation.Navigate(typeof(Views.DownloadPage));
+
+            // バックグラウンドでツールの初期化/ダウンロード/アップデートを実行
+            await DownloadService.Instance.InitializeToolsAsync();
         }
 
         private SettingsPageViewModel? _settingsViewModel;
